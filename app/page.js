@@ -71,12 +71,14 @@ export default function Home() {
 
       {/* Chat Section */}
       <section id="chat" className={styles.chatSection}>
-        <div className={styles.container}>
+        <div className={styles.container} style={{ textAlign: "center" }}>
           <div className={styles.chatHeaderInfo}>
             <h2 className={styles.sectionTitle}>Let's Chat</h2>
-            <p className={styles.chatSubtitle}>It's safe, private, and we are ready to listen. Drop a message below.</p>
+            <p className={styles.chatSubtitle}>It's safe, private, and we are ready to listen. Click below to enter the safe space.</p>
           </div>
-          <Chat />
+          <a href="/student/dashboard" className={styles.primaryButton} style={{ fontSize: "1.2rem", padding: "15px 30px", marginTop: "20px", display: "inline-block" }}>
+            Enter Student Chat
+          </a>
         </div>
       </section>
       
@@ -85,6 +87,9 @@ export default function Home() {
         <div className={styles.container}>
           <p>© {new Date().getFullYear()} MEOW'S HELPLINE SERVICE.</p>
           <p className={styles.emergencyNote}>If you are in immediate danger or a problem is out of control, we can help you contact the police or emergency services.</p>
+          <div style={{ marginTop: "20px" }}>
+            <a href="/login" style={{ color: "#666", textDecoration: "underline", fontSize: "0.9rem" }}>Helper & Admin Login</a>
+          </div>
         </div>
       </footer>
     </main>

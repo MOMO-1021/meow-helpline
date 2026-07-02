@@ -1,5 +1,6 @@
 import { Nunito } from "next/font/google";
 import "./globals.css";
+import { Providers } from "@/components/Providers";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -7,14 +8,16 @@ const nunito = Nunito({
 });
 
 export const metadata = {
-  title: "MEOW'S HELPLINE SERVICE",
-  description: "A safe, anonymous helpline by teenagers for teenagers in Manipur. We offer support in Meitei lon and a safe space to share your problems.",
+  title: "Meow Helpline",
+  description: "Real-time helpline for students",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${nunito.variable}`}>
-      <body>{children}</body>
+    <html lang="en" className={`${nunito.variable}`} suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

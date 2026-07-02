@@ -4,7 +4,7 @@ import styles from './Chat.module.css';
 
 export default function Chat() {
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hi there. You are in a safe space. I'm here to listen.", sender: "bot", timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+    { id: 1, text: "Hi there. You are in a safe space. I'm here to listen.", sender: "bot", timestamp: "Just now" }
   ]);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef(null);
