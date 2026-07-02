@@ -1,12 +1,37 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fff5f5; /* Very soft pastel peach/pink */
+  --foreground: #4a4a4a; /* Soft dark gray for text, gentler than pure black */
+  --primary: #ffa3a3; /* Soft pinkish primary */
+  --primary-hover: #ff8585;
+  --secondary: #a3c4ff; /* Calming pastel blue */
+  --secondary-hover: #85aeff;
+  --accent: #ffd6a3; /* Warm pastel yellow/orange */
+  
+  --surface: #ffffff; /* Card backgrounds */
+  --border: #f0e6e6;
+  
+  /* Chat specific */
+  --chat-bg: #e5ddd5; /* Whatsapp-like chat background with a soft twist */
+  --msg-sent: #dcf8c6; /* Whatsapp sent message color */
+  --msg-received: #ffffff; /* Whatsapp received message color */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #2d2b2b;
+    --foreground: #fcfcfc;
+    --primary: #ff8585;
+    --primary-hover: #ffa3a3;
+    --secondary: #85aeff;
+    --secondary-hover: #a3c4ff;
+    --accent: #ffd6a3;
+
+    --surface: #3a3737;
+    --border: #4a4646;
+
+    --chat-bg: #1e1e1e;
+    --msg-sent: #005c4b;
+    --msg-received: #202c33;
   }
 }
 
@@ -26,9 +51,10 @@ body {
   flex-direction: column;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-nunito), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 * {
@@ -42,8 +68,10 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* Base interactive styles */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
 }
