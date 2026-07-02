@@ -21,10 +21,6 @@ export default function StudentChat() {
     newSocket.on("matched-with-helper", (data) => {
       setStatus("matched");
       setRoomId(data.roomId);
-      setShowMatchMessage(true);
-      setTimeout(() => {
-        setShowMatchMessage(false);
-      }, 3000);
     });
 
     newSocket.on("new-message", (data) => {
@@ -36,10 +32,32 @@ export default function StudentChat() {
       setRoomId(null);
       setMessages([]);
       setShowEndPrompt(false);
+      setShowMatchMessage(false);
     });
 
     return () => newSocket.close();
   }, []);
+
+  // Prevent accidental reload during an active chat
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (status === "matched") {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [status]);
+
+  // Robustly handle the 3-second match message
+  useEffect(() => {
+    if (status === "matched") {
+      setShowMatchMessage(true);
+      const timer = setTimeout(() => setShowMatchMessage(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   const requestHelp = () => {
     setStatus("waiting");

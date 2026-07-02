@@ -90,6 +90,15 @@ app.prepare().then(() => {
       }
     });
 
+    // If a user reloads or closes the tab, end their active chats
+    socket.on("disconnecting", () => {
+      for (const room of socket.rooms) {
+        if (room.startsWith("room-")) {
+          io.to(room).emit("chat-ended");
+        }
+      }
+    });
+
     socket.on("disconnect", () => {
       console.log("Client disconnected:", socket.id);
       onlineHelpers.delete(socket.id);
