@@ -27,6 +27,7 @@ app.prepare().then(() => {
       
       // Notify helpers
       io.to("helpers-room").emit("new-distress-signal", { studentId: socket.id });
+      io.to("helpers-room").emit("waiting-list", Array.from(waitingStudents.values()));
 
       // Step 10: Escalation Timeout (2 minutes)
       setTimeout(() => {
@@ -55,6 +56,10 @@ app.prepare().then(() => {
         const roomName = `room-${studentId}-${socket.id}`;
         
         socket.join(roomName);
+        const studentSocket = io.sockets.sockets.get(studentId);
+        if (studentSocket) {
+          studentSocket.join(roomName);
+        }
         
         // Notify student they are matched
         io.to(studentId).emit("matched-with-helper", { roomId: roomName });
