@@ -10,6 +10,7 @@ export default function StudentChat() {
   const [input, setInput] = useState("");
   const [anonName, setAnonName] = useState("");
   const [showEndPrompt, setShowEndPrompt] = useState(false);
+  const [showMatchMessage, setShowMatchMessage] = useState(false);
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -20,6 +21,10 @@ export default function StudentChat() {
     newSocket.on("matched-with-helper", (data) => {
       setStatus("matched");
       setRoomId(data.roomId);
+      setShowMatchMessage(true);
+      setTimeout(() => {
+        setShowMatchMessage(false);
+      }, 3000);
     });
 
     newSocket.on("new-message", (data) => {
@@ -95,8 +100,12 @@ export default function StudentChat() {
           )}
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 15 }}>
-            <h3 style={{ color: "green", margin: 0 }}>Matched with a helper!</h3>
-            <button onClick={() => setShowEndPrompt(true)} style={{ padding: "8px 16px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: 4, cursor: "pointer", fontWeight: "bold" }}>
+            {showMatchMessage ? (
+              <h3 style={{ color: "green", margin: 0, marginRight: 15 }}>Matched with a helper!</h3>
+            ) : (
+              <div /> /* Empty div to push the button to the right via space-between */
+            )}
+            <button onClick={() => setShowEndPrompt(true)} style={{ padding: "8px 16px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: 4, cursor: "pointer", fontWeight: "bold", marginLeft: "auto" }}>
               End Chat
             </button>
           </div>
