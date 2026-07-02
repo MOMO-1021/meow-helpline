@@ -92,24 +92,40 @@ export default function HelperDashboard() {
       {status === "matched" && (
         <div style={{ border: "1px solid #ccc", padding: 20, borderRadius: 8 }}>
           <h3 style={{ color: "green" }}>Matched with a student!</h3>
-          <div style={{ height: 400, overflowY: "auto", borderBottom: "1px solid #eee", marginBottom: 15 }}>
+          <div style={{ height: 400, overflowY: "auto", borderBottom: "1px solid #eee", marginBottom: 15, padding: "0 10px" }}>
             {messages.map((m, i) => (
-              <div key={i} style={{ textAlign: m.senderId === socket.id ? "right" : "left", margin: "10px 0" }}>
-                <span style={{ display: "inline-block", padding: "8px 12px", borderRadius: 15, backgroundColor: m.senderId === socket.id ? "#0070f3" : "#f1f1f1", color: m.senderId === socket.id ? "white" : "black" }}>
+              <div key={i} style={{ textAlign: m.senderId === socket.id ? "right" : "left", margin: "12px 0" }}>
+                <span style={{ 
+                  display: "inline-block", 
+                  padding: "10px 14px", 
+                  borderRadius: 15, 
+                  backgroundColor: m.senderId === socket.id ? "#0070f3" : "#f1f1f1", 
+                  color: m.senderId === socket.id ? "white" : "black",
+                  maxWidth: "75%",
+                  wordBreak: "break-word",
+                  whiteSpace: "pre-wrap",
+                  textAlign: "left"
+                }}>
                   {m.message}
                 </span>
               </div>
             ))}
           </div>
-          <form onSubmit={sendMessage} style={{ display: "flex", gap: 10 }}>
-            <input 
-              type="text" 
+          <form onSubmit={sendMessage} style={{ display: "flex", gap: 10, alignItems: "flex-end" }}>
+            <textarea 
               value={input} 
               onChange={(e) => setInput(e.target.value)} 
-              style={{ flex: 1, padding: 10, fontSize: 16 }} 
-              placeholder="Type your message..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage(e);
+                }
+              }}
+              style={{ flex: 1, padding: 10, fontSize: 16, borderRadius: 8, border: "1px solid #ccc", resize: "none", minHeight: "44px", maxHeight: "120px", fontFamily: "inherit" }} 
+              placeholder="Type your message... (Shift+Enter for new line)"
+              rows={input.split("\n").length > 1 ? Math.min(input.split("\n").length, 4) : 1}
             />
-            <button type="submit" style={{ padding: 10, backgroundColor: "#0070f3", color: "white", border: "none", cursor: "pointer", borderRadius: 4 }}>Send</button>
+            <button type="submit" style={{ padding: "12px 20px", height: "44px", backgroundColor: "#0070f3", color: "white", border: "none", cursor: "pointer", borderRadius: 8, fontWeight: "bold" }}>Send</button>
           </form>
         </div>
       )}
