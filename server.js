@@ -36,7 +36,12 @@ app.prepare().then(() => {
           // Backup ntfy alert
           fetch('https://ntfy.sh/meow-helpline-escalation', {
             method: 'POST',
-            body: 'ESCALATION: Student waiting for >2 minutes!',
+            body: 'ESCALATION: A student has been waiting for > 2 minutes! Please log in to help.',
+            headers: {
+              'Title': 'Meow Helpline EMERGENCY',
+              'Priority': 'urgent',
+              'Tags': 'rotating_light,warning'
+            }
           }).catch(err => console.error('ntfy error:', err));
         }
       }, 2 * 60 * 1000); // 2 minutes
