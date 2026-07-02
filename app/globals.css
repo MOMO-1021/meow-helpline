@@ -75,3 +75,19 @@ button {
   border: none;
   background: none;
 }
+
+/* Custom scrollbar for chat textarea */
+.chat-input::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-input::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chat-input::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+.chat-input {
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useSession } from "next-auth/react";
 
@@ -11,6 +11,7 @@ export default function HelperDashboard() {
   const [roomId, setRoomId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const textareaRef = useRef(null);
 
   useEffect(() => {
     if (typeof window !== "undefined" && "Notification" in window) {
@@ -52,6 +53,12 @@ export default function HelperDashboard() {
     socket.emit("accept-student", studentId);
   };
 
+  const handleInputResize = (e) => {
+    const target = e.target;
+    target.style.height = "44px"; 
+    target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
+  };
+
   const sendMessage = (e) => {
     e.preventDefault();
     if (!input.trim() || !roomId) return;
@@ -60,13 +67,16 @@ export default function HelperDashboard() {
     socket.emit("send-message", { roomId, message: input });
     setMessages((prev) => [...prev, msg]);
     setInput("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "44px";
+    }
   };
 
   if (!session) return <div>Loading session...</div>;
 
   return (
     <div style={{ maxWidth: 800, margin: "50px auto", fontFamily: "sans-serif" }}>
-      <h1>Helper Dashboard</h1>
+      <h1>HelperDashboard</h1>
       <p>Logged in as {session.user.name}</p>
 
       {status === "idle" && (
@@ -113,19 +123,36 @@ export default function HelperDashboard() {
           </div>
           <form onSubmit={sendMessage} style={{ display: "flex", gap: 10, alignItems: "flex-end" }}>
             <textarea 
+              ref={textareaRef}
+              className="chat-input"
               value={input} 
-              onChange={(e) => setInput(e.target.value)} 
+              onChange={(e) => {
+                setInput(e.target.value);
+                handleInputResize(e);
+              }} 
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   sendMessage(e);
                 }
               }}
-              style={{ flex: 1, padding: 10, fontSize: 16, borderRadius: 8, border: "1px solid #ccc", resize: "none", minHeight: "44px", maxHeight: "120px", fontFamily: "inherit", overflow: "hidden" }} 
+              style={{ 
+                flex: 1, 
+                padding: "10px 15px", 
+                fontSize: 16, 
+                lineHeight: "1.4",
+                borderRadius: 20, 
+                border: "1px solid #ccc", 
+                resize: "none", 
+                height: "44px", 
+                minHeight: "44px", 
+                fontFamily: "inherit", 
+                overflowY: "auto",
+                boxSizing: "border-box"
+              }} 
               placeholder=""
-              rows={input.split("\n").length > 1 ? Math.min(input.split("\n").length, 4) : 1}
             />
-            <button type="submit" style={{ padding: "12px 20px", height: "44px", backgroundColor: "#0070f3", color: "white", border: "none", cursor: "pointer", borderRadius: 8, fontWeight: "bold" }}>Send</button>
+            <button type="submit" style={{ padding: "0 20px", height: "44px", backgroundColor: "#0070f3", color: "white", border: "none", cursor: "pointer", borderRadius: 22, fontWeight: "bold" }}>Send</button>
           </form>
         </div>
       )}
