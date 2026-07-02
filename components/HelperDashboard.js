@@ -121,8 +121,8 @@ export default function HelperDashboard() {
                   sendMessage(e);
                 }
               }}
-              style={{ flex: 1, padding: 10, fontSize: 16, borderRadius: 8, border: "1px solid #ccc", resize: "none", minHeight: "44px", maxHeight: "120px", fontFamily: "inherit" }} 
-              placeholder="Type your message... (Shift+Enter for new line)"
+              style={{ flex: 1, padding: 10, fontSize: 16, borderRadius: 8, border: "1px solid #ccc", resize: "none", minHeight: "44px", maxHeight: "120px", fontFamily: "inherit", overflow: "hidden" }} 
+              placeholder=""
               rows={input.split("\n").length > 1 ? Math.min(input.split("\n").length, 4) : 1}
             />
             <button type="submit" style={{ padding: "12px 20px", height: "44px", backgroundColor: "#0070f3", color: "white", border: "none", cursor: "pointer", borderRadius: 8, fontWeight: "bold" }}>Send</button>

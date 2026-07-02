@@ -5,10 +5,14 @@ import User from '@/models/User';
 
 export async function POST(req) {
   try {
-    const { username, password, role } = await req.json();
+    const { username, password, role, accessCode } = await req.json();
 
     if (!username || !password || !role) {
       return NextResponse.json({ message: 'Missing fields' }, { status: 400 });
+    }
+
+    if (accessCode !== "MEOW") {
+      return NextResponse.json({ message: 'Invalid Helper Access Code!' }, { status: 403 });
     }
 
     await dbConnect();

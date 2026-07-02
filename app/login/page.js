@@ -7,6 +7,7 @@ export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [accessCode, setAccessCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const role = "helper";
   const [error, setError] = useState("");
@@ -36,7 +37,7 @@ export default function LoginPage() {
         const res = await fetch("/api/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password, role }),
+          body: JSON.stringify({ username, password, role, accessCode }),
         });
 
         if (res.ok) {
@@ -84,6 +85,18 @@ export default function LoginPage() {
           disabled={isLoading}
           style={{ padding: 10, fontSize: 16 }}
         />
+        
+        {!isLogin && (
+          <input 
+            type="text" 
+            placeholder="Universal Access Code (Case Sensitive)" 
+            value={accessCode} 
+            onChange={(e) => setAccessCode(e.target.value)}
+            required
+            disabled={isLoading}
+            style={{ padding: 10, fontSize: 16 }}
+          />
+        )}
 
         <button 
           type="submit" 
