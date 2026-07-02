@@ -11,6 +11,7 @@ export default function HelperDashboard() {
   const [roomId, setRoomId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [showEndPrompt, setShowEndPrompt] = useState(false);
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -46,6 +47,13 @@ export default function HelperDashboard() {
       setMessages((prev) => [...prev, data]);
     });
 
+    newSocket.on("chat-ended", () => {
+      setStatus("idle");
+      setRoomId(null);
+      setMessages([]);
+      setShowEndPrompt(false);
+    });
+
     return () => newSocket.close();
   }, []);
 
@@ -57,6 +65,10 @@ export default function HelperDashboard() {
     const target = e.target;
     target.style.height = "44px"; 
     target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
+  };
+
+  const endChat = () => {
+    socket.emit("end-chat", { roomId });
   };
 
   const sendMessage = (e) => {
@@ -100,8 +112,27 @@ export default function HelperDashboard() {
       )}
 
       {status === "matched" && (
-        <div style={{ border: "1px solid #ccc", padding: 20, borderRadius: 8 }}>
-          <h3 style={{ color: "green" }}>Matched with a student!</h3>
+        <div style={{ border: "1px solid #ccc", padding: 20, borderRadius: 8, position: "relative" }}>
+          
+          {showEndPrompt && (
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: 8, zIndex: 10 }}>
+              <div style={{ backgroundColor: "white", padding: 30, borderRadius: 12, textAlign: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
+                <h3 style={{ margin: "0 0 15px 0", color: "#333" }}>Are you sure you want to end this chat?</h3>
+                <div style={{ display: "flex", justifyContent: "center", gap: 15 }}>
+                  <button onClick={() => setShowEndPrompt(false)} style={{ padding: "10px 20px", backgroundColor: "#6c757d", color: "white", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: "bold" }}>Stay</button>
+                  <button onClick={endChat} style={{ padding: "10px 20px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: "bold" }}>Exit</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 15 }}>
+            <h3 style={{ color: "green", margin: 0 }}>Matched with a student!</h3>
+            <button onClick={() => setShowEndPrompt(true)} style={{ padding: "8px 16px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: 4, cursor: "pointer", fontWeight: "bold" }}>
+              End Chat
+            </button>
+          </div>
+          
           <div style={{ height: 400, overflowY: "auto", borderBottom: "1px solid #eee", marginBottom: 15, padding: "0 10px" }}>
             {messages.map((m, i) => (
               <div key={i} style={{ textAlign: m.senderId === socket.id ? "right" : "left", margin: "12px 0" }}>

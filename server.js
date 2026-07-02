@@ -78,6 +78,18 @@ app.prepare().then(() => {
       socket.to(roomId).emit("new-message", { message, senderId: socket.id });
     });
 
+    socket.on("end-chat", ({ roomId }) => {
+      io.to(roomId).emit("chat-ended");
+      // Force all sockets to leave the room
+      const clients = io.sockets.adapter.rooms.get(roomId);
+      if (clients) {
+        for (const clientId of clients) {
+          const clientSocket = io.sockets.sockets.get(clientId);
+          if (clientSocket) clientSocket.leave(roomId);
+        }
+      }
+    });
+
     socket.on("disconnect", () => {
       console.log("Client disconnected:", socket.id);
       onlineHelpers.delete(socket.id);
